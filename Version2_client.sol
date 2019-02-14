@@ -10,7 +10,9 @@ contract insurance {
     
     uint reputation;
     
-    mapping(uint => string) rewards;
+    mapping(uint => string) reward_text;
+    mapping(uint => uint) reward_cost;
+    mapping(uint => uint) reward_time;
    // uint public conversionRate;
     
     address owner;
@@ -32,7 +34,7 @@ contract insurance {
     }
     */
     
-    function addRep(uint _rep) public {
+    function addRep(uint _rep) public{
         reputation += _rep;
     }
     
@@ -41,19 +43,26 @@ contract insurance {
     }
     
     
-    function getReward(/*uint _tier,*/ uint _id) public view returns (string){
+    function getReward(uint _id) public returns (string, uint){
     //get Voucher from external (barcode/QR/...)
-        return rewards[_id];
+        if(now < reward_time[_id]) removeReward(_id);
+        require(now>reward_time[_id]);
+        string memory text = reward_text[_id];
+        uint cost = reward_cost[_id];
+        return (text,cost);
     }
     
-    function addReward(/*uint _tier,*/ uint _id, string _text) public{
+    function addReward(/*uint _tier,*/ uint _id, string _text, uint _cost, uint _daysExisting) public{
         require(msg.sender==owner);
         require(now < deployTime + 1 weeks);
-        rewards[_id] = _text;
+        reward_text[_id] = _text;
+        reward_cost[_id] = _cost;
+        reward_time[_id] = now + _daysExisting*60*60*24;
     }
     
-    function removeReward(uint _id) public {
-        rewards[_id] = "" ;
+    function removeReward(uint _id) private {
+        reward_text[_id] = "";
+        reward_cost[_id] = 0;
     }
     
     
