@@ -22,6 +22,7 @@ contract insurance {
         bETHerHealth(_bETHerHealth).newInsuranceAt(this);
         owner = msg.sender;
         deployTime = now;
+        reputation = 1;
     }
  /*   
     function setConversionRate(uint _conversionRate) public {
