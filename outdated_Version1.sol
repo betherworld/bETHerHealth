@@ -3,7 +3,7 @@ pragma solidity >=0.4.22 <0.6.0;
 
 //1 Contract per Company, keeps track of its runners
 //TODO remove testingAddCoins before deploying
-//
+//depracted
 
 
 contract bETHerHealth {
